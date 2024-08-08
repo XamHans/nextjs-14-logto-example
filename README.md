@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Logto Integration
+
+Logto is an open-source identity and access management (IAM) solution designed to simplify authentication and authorization for modern applications. It supports various authentication methods and provides easy-to-use APIs for developers.
+
+## Features
+- **Single Sign-On (SSO):** Supports multiple identity providers (e.g., Google, GitHub).
+- **OAuth 2.0 and OpenID Connect (OIDC):** Secure and standardized protocols.
+- **User Management:** Includes built-in user management features with an admin console.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- **Node.js** `^18.12.0`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Setup with Logto Cloud
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Sign Up and Create an Application:**
+   - Visit [Logto Cloud](https://cloud.logto.io) and sign up using Google, GitHub, or email.
+ 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Install Logto SDK:**
+   - Run the following command to install the Logto SDK:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   ```bash
+   npm install @logto/next
+   ```
 
-## Learn More
+3. **Create a Logto Configuration File:**
+    - Follow the onboarding flow to create a new application. Note the **endpoint**, **appId**, and **appSecret**. 
+        https://docs.logto.io/docs/recipes/integrate-logto/
 
-To learn more about Next.js, take a look at the following resources:
+   - In your project directory, create a `logto.ts` file with the following content:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```typescript
+   import { UserScope } from "@logto/next";
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+   export const logtoConfig = {
+     endpoint: 'https://your-logto-endpoint',
+     appId: 'your-app-id',
+     appSecret: 'your-app-secret',
+     baseUrl: 'http://localhost:3000', // Change to your own base URL
+     cookieSecret: 'your-32-digit-cookie-secret', // Auto-generated 32 digit secret
+     cookieSecure: process.env.NODE_ENV === 'production',
+     scopes: [UserScope.Email, UserScope.Profile],
+   };
 
-## Deploy on Vercel
+4. **Activate the default email connector**
+   - In order to recieve the email verification link, you need to activate the default email connector. 
+   - Go to the `Connectors` tab in the Logto Cloud console and activate the default email connector.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
